@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIDE QUEST · Daily Dare App · V1 Reference</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --panel: #101317;
+    --fg: #f4f4f2;
+    --dim: #9aa3ad;          /* brighter than before for readability */
+    --line: #262b31;
+    --accent: #ff5b1a;       /* signal amber — primary */
+    --accent-2: #2ee6a6;     /* tactical green */
+    --easy: #2ee6a6;         /* green  */
+    --med:  #ffc23d;         /* amber  */
+    --hard: #ff4d4d;         /* red    */
+    --mono: "SFMono-Regular", "JetBrains Mono", "Menlo", "Consolas", monospace;
+    --sans: -apple-system, "Helvetica Neue", "Arial", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(255,91,26,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(46,230,166,0.06), transparent 55%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent); color: #0a0a0a; }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+  .mono { font-family: var(--mono); }
+  .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.0; }
+
+  /* ---- nav ---- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(10,10,10,0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  nav .brand { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; font-weight: 700; }
+  nav .brand b { background: var(--accent); color: #0a0a0a; padding: 2px 5px; }
+  nav .links { display: flex; gap: 22px; }
+  nav a { color: var(--dim); text-decoration: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; transition: color .15s; }
+  nav a:hover { color: var(--fg); }
+  @media (max-width: 760px){ nav .links { display:none; } }
+
+  /* ---- hero ---- */
+  header.hero { border-bottom: 1px solid var(--line); padding: 96px 0 80px; }
+  .hero .stamp { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; margin-bottom: 34px; }
+  .hero h1 { font-size: clamp(52px, 11vw, 132px); text-transform: uppercase; }
+  .hero h1 .o { -webkit-text-stroke: 1.5px var(--accent); color: transparent; }
+  .hero .tag { margin-top: 26px; max-width: 600px; font-size: 18px; color: #cfcfcf; }
+  .hero .formula { margin-top: 30px; font-family: var(--mono); font-size: 13px; color: var(--dim); letter-spacing: 0.04em; }
+  .hero .formula b { color: var(--accent); }
+  .cta-row { margin-top: 44px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; padding: 14px 24px; text-decoration: none; border: 1px solid #f2f2f2; transition: all .15s; }
+  .btn { border: 1px solid var(--accent); }
+  .btn.solid { background: var(--accent); color: #0a0a0a; border-color: var(--accent); }
+  .btn.solid:hover { background: transparent; color: var(--accent); }
+  .btn.ghost { color: var(--fg); border-color: var(--line); }
+  .btn.ghost:hover { background: var(--accent); color: #0a0a0a; border-color: var(--accent); }
+
+  /* ---- section frame ---- */
+  section { border-bottom: 1px solid var(--line); padding: 84px 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+  .sec-head .num { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .sec-head h2 { font-size: clamp(30px, 5vw, 52px); text-transform: uppercase; }
+
+  .lede { font-size: clamp(22px, 3.2vw, 34px); font-weight: 600; letter-spacing: -0.02em; max-width: 900px; line-height: 1.25; }
+  .lede em { font-style: normal; color: var(--accent); }
+
+  /* ---- pillars ---- */
+  .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 52px; }
+  .pillar { background: var(--panel); padding: 30px 24px; }
+  .pillar .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; }
+  .pillar .v { font-size: 19px; font-weight: 700; margin-top: 14px; letter-spacing: -0.01em; color: var(--accent); }
+  .pillar p { color: var(--dim); font-size: 14px; margin-top: 8px; }
+  @media (max-width: 720px){ .pillars { grid-template-columns: 1fr; } }
+
+  /* ---- core loop ---- */
+  .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .step { background: var(--panel); padding: 26px 18px; min-height: 220px; display: flex; flex-direction: column; }
+  .step .n { font-family: var(--mono); font-size: 13px; color: #0a0a0a; background: var(--accent); width: 28px; height: 28px; display: grid; place-items: center; font-weight: 700; }
+  .step h3 { font-size: 16px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0; }
+  .step p { color: var(--dim); font-size: 13px; margin-top: 10px; }
+  @media (max-width: 980px){ .steps { grid-template-columns: 1fr 1fr 1fr; } }
+  @media (max-width: 620px){ .steps { grid-template-columns: 1fr 1fr; } }
+
+  /* ---- difficulty / points ---- */
+  .diff { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .diff .col { background: var(--panel); padding: 30px 26px; }
+  .diff .mult { font-family: var(--mono); font-size: 44px; font-weight: 800; line-height: 1; }
+  .diff .col.t-easy { border-top: 3px solid var(--easy); }
+  .diff .col.t-med  { border-top: 3px solid var(--med); }
+  .diff .col.t-hard { border-top: 3px solid var(--hard); }
+  .diff .col.t-easy .mult, .diff .col.t-easy .tier { color: var(--easy); }
+  .diff .col.t-med  .mult, .diff .col.t-med  .tier { color: var(--med); }
+  .diff .col.t-hard .mult, .diff .col.t-hard .tier { color: var(--hard); }
+  .diff .tier { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-top: 14px; }
+  .diff .desc { font-size: 14px; color: #bdbdbd; margin-top: 6px; }
+  .diff .ex { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 16px; font-size: 13.5px; color: var(--dim); }
+  .diff .ex b { color: var(--fg); font-weight: 600; display:block; margin-bottom: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; }
+  @media (max-width: 760px){ .diff { grid-template-columns: 1fr; } }
+
+  /* ---- pull ---- */
+  .pull-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+  .pull-list { list-style: none; }
+  .pull-list li { border-top: 1px solid var(--line); padding: 22px 0; display: flex; gap: 18px; align-items: baseline; }
+  .pull-list li:last-child { border-bottom: 1px solid var(--line); }
+  .pull-list .tk { font-family: var(--mono); font-size: 12px; color: var(--accent); white-space: nowrap; }
+  .pull-list .tx b { display:block; font-size: 18px; }
+  .pull-list .tx span { color: var(--dim); font-size: 14px; }
+  .board { border: 1px solid var(--line); font-family: var(--mono); }
+  .board .bh { border-bottom: 1px solid var(--line); padding: 12px 16px; font-size: 11px; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; display:flex; justify-content: space-between; }
+  .board .row { padding: 13px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .board .row:last-child { border-bottom: none; }
+  .board .bh { color: var(--accent); }
+  .board .row.you { background: var(--accent); color: #0a0a0a; }
+  .board .rank { color: var(--dim); width: 30px; display:inline-block; }
+  .board .row.you .rank { color: #0a0a0a; }
+  .board .pts { font-weight: 700; }
+  @media (max-width: 820px){ .pull-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+  /* ---- features grid ---- */
+  .feat { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .feat .cell { background: var(--panel); padding: 28px 24px; }
+  .feat .cell { border-top: 2px solid transparent; transition: border-color .15s; }
+  .feat .cell:hover { border-top-color: var(--accent); }
+  .feat .cell h3 { font-size: 16px; text-transform: uppercase; letter-spacing: 0; color: var(--accent); }
+  .feat .cell p { color: var(--dim); font-size: 13.5px; margin-top: 10px; }
+  @media (max-width: 820px){ .feat { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px){ .feat { grid-template-columns: 1fr; } }
+
+  /* ---- who ---- */
+  .who { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .who .cell { background: var(--panel); padding: 30px 26px; }
+  .who .cell h3 { font-size: 18px; text-transform: uppercase; letter-spacing: 0; }
+  .who .cell p { color: var(--dim); font-size: 14px; margin-top: 10px; }
+  @media (max-width: 720px){ .who { grid-template-columns: 1fr; } }
+
+  /* ---- scope (v1 vs later) ---- */
+  .scope { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .scope .col { background: var(--panel); padding: 30px 24px; }
+  .scope .col h3 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .scope .col.now { border-top: 3px solid var(--accent); }
+  .scope .col.now h3 { background: var(--accent); color: #0a0a0a; display:inline-block; padding: 4px 8px; }
+  .scope ul { list-style: none; margin-top: 20px; }
+  .scope li { font-size: 13.5px; color: #bdbdbd; padding: 9px 0; border-top: 1px solid var(--line); }
+  .scope li:first-child { border-top: none; }
+  @media (max-width: 820px){ .scope { grid-template-columns: 1fr; } }
+
+  /* ---- monetization strip ---- */
+  .money { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); }
+  .money .m { background:var(--bg); padding: 26px 22px; }
+  .money .m .k { font-family:var(--mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); }
+  .money .m .v { font-size:17px; font-weight:700; margin-top:10px; color: var(--accent); }
+  .money .m p { color:var(--dim); font-size:13px; margin-top:8px; }
+  @media (max-width: 760px){ .money { grid-template-columns: 1fr; } }
+
+  /* ---- close ---- */
+  .close { text-align: center; padding: 110px 0; }
+  .close h2 { font-size: clamp(40px, 9vw, 100px); text-transform: uppercase; }
+  .close p { color: var(--dim); margin-top: 20px; font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; }
+
+  footer { border-top: 1px solid var(--line); padding: 30px 0; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer .mono { font-size: 11px; color: var(--dim); letter-spacing: 0.16em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><b>SQ</b> SIDE&nbsp;QUEST</div>
+    <div class="links">
+      <a href="#what">What</a>
+      <a href="#loop">Loop</a>
+      <a href="#points">Points</a>
+      <a href="#pull">Why</a>
+      <a href="#features">Features</a>
+      <a href="#scope">V1 Scope</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="stamp label">Final Concept · V1 · Internal Reference</span>
+    <h1>SIDE<br><span class="o">QUEST</span></h1>
+    <p class="tag">A daily dare app. One quest a day, pulled from a deck. Fun, slightly unhinged, worth a story. Do it, prove it, AI verifies, you earn points.</p>
+    <p class="formula">FORMULA: <b>Truth-or-Dare</b> × <b>BeReal</b> × <b>Strava</b>. Prompted, verified, social, a little chaotic.</p>
+    <div class="cta-row">
+      <a class="btn solid" href="#loop">See The Core Loop</a>
+      <a class="btn ghost" href="#scope">What Ships in V1</a>
+    </div>
+  </div>
+</header>
+
+<!-- WHAT IT IS -->
+<section id="what">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">01</span><h2>What It Is</h2></div>
+    <p class="lede">Every day, you get <em>one quest</em> from a deck. You have until midnight to complete it, upload photo or video proof, and let AI verify it. Points, streaks, leaderboards, and squads turn it into a daily ritual.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="k">The Deck</div>
+        <div class="v">One quest, daily</div>
+        <p>Drops at a set time each day. No endless feed, just a single prompt that pushes you into a story.</p>
+      </div>
+      <div class="pillar">
+        <div class="k">The Proof</div>
+        <div class="v">Verified, not vibes</div>
+        <p>Photo or video evidence. AI does first-pass verification; community review covers edge cases.</p>
+      </div>
+      <div class="pillar">
+        <div class="k">The Squad</div>
+        <div class="v">Social by default</div>
+        <p>Proofs auto-post to your squad chat. Streaks and dual leaderboards keep everyone in the chase.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE LOOP -->
+<section id="loop">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">02</span><h2>The Core Loop</h2></div>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h3>Drop</h3><p>A quest drops at a set time each day, like 9 AM local. You see its difficulty before accepting.</p></div>
+      <div class="step"><span class="n">2</span><h3>Complete</h3><p>You have until midnight to go do it in the real world.</p></div>
+      <div class="step"><span class="n">3</span><h3>Prove</h3><p>Upload a photo or short video as proof. One screen, two taps.</p></div>
+      <div class="step"><span class="n">4</span><h3>Verify</h3><p>AI verifies the submission. Ambiguous cases route to community voting.</p></div>
+      <div class="step"><span class="n">5</span><h3>Score</h3><p>Points are awarded by difficulty: 1x, 3x, or 5x.</p></div>
+      <div class="step"><span class="n">6</span><h3>Climb</h3><p>Streak extends. Leaderboards update. The squad chat lights up.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- POINTS / DIFFICULTY -->
+<section id="points">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">03</span><h2>Difficulty &amp; Points</h2></div>
+    <p class="lede" style="font-size:clamp(20px,2.6vw,26px); margin-bottom:8px;">You see the difficulty before you accept, so you can <em>opt in to the day you're having.</em></p>
+    <div class="diff">
+      <div class="col t-easy">
+        <div class="mult">1×</div>
+        <div class="tier">Easy</div>
+        <div class="desc">Mildly silly, low stakes.</div>
+        <div class="ex"><b>Examples</b>Wear sunglasses indoors for an hour. Walk backward for a block. High-five three strangers.</div>
+      </div>
+      <div class="col t-med">
+        <div class="mult">3×</div>
+        <div class="tier">Medium</div>
+        <div class="desc">Real social courage required.</div>
+        <div class="ex"><b>Examples</b>Sing a song chorus in public. Compliment 5 strangers in a row. Take a "serious" fake phone call in a quiet space for 2 minutes.</div>
+      </div>
+      <div class="col t-hard">
+        <div class="mult">5×</div>
+        <div class="tier">Hard</div>
+        <div class="desc">The story you'll tell for years.</div>
+        <div class="ex"><b>Examples</b>Busk in public for 5 minutes. Give a 1-minute TED-style speech about something absurd. Ask a fancy hotel concierge for a rec, then leave.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY IT STICKS -->
+<section id="pull">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">04</span><h2>The Magnetic Pull</h2></div>
+    <div class="pull-grid">
+      <div>
+        <p class="lede" style="font-size:clamp(20px,2.6vw,26px); margin-bottom:30px;">The quest isn't the hook. The <em>social gravity</em> around it is.</p>
+        <ul class="pull-list">
+          <li><span class="tk">[ STREAK ]</span><span class="tx"><b>The streak you can't break</b><span>The retention engine. Milestones at 7, 30, 100, 365 days, plus a real fear of losing it. 3 free skip tokens keep it alive.</span></span></li>
+          <li><span class="tk">[ SQUAD ]</span><span class="tx"><b>The chat reaction</b><span>Proof auto-posts to the squad chat. The replies are the dopamine.</span></span></li>
+          <li><span class="tk">[ FOMO&nbsp;]</span><span class="tx"><b>Your roommate at #3</b><span>You're at #7. That gap is the whole reason you open the app tonight.</span></span></li>
+        </ul>
+      </div>
+      <div class="board">
+        <div class="bh"><span>SQUAD · POINTS · ALL-TIME</span><span>PTS</span></div>
+        <div class="row"><span><span class="rank">01</span> maya</span><span class="pts">2,940</span></div>
+        <div class="row"><span><span class="rank">02</span> dev</span><span class="pts">2,710</span></div>
+        <div class="row"><span><span class="rank">03</span> roommate</span><span class="pts">2,455</span></div>
+        <div class="row"><span><span class="rank">04</span> sam</span><span class="pts">2,180</span></div>
+        <div class="row"><span><span class="rank">05</span> jordan</span><span class="pts">1,990</span></div>
+        <div class="row"><span><span class="rank">06</span> alex</span><span class="pts">1,820</span></div>
+        <div class="row you"><span><span class="rank">07</span> YOU</span><span class="pts">1,795</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">05</span><h2>Key Features</h2></div>
+    <div class="feat">
+      <div class="cell"><h3>Daily Quest Drop</h3><p>One quest per day from a deck you've unlocked. Free users get the standard deck; premium expands the themes.</p></div>
+      <div class="cell"><h3>AI Verification</h3><p>Photo/video proof, AI first-pass, community fallback for ambiguous cases. Hard quests lean more on community review.</p></div>
+      <div class="cell"><h3>Skip Tokens</h3><p>3 free skips on signup to keep a streak alive. Extra skips are paid or bundled into premium.</p></div>
+      <div class="cell"><h3>Streaks</h3><p>Visible counter with celebratory milestones. The core retention loop.</p></div>
+      <div class="cell"><h3>Dual Leaderboards</h3><p>Streak length and points (weekly + all-time), each at global, friend, and squad levels.</p></div>
+      <div class="cell"><h3>Squads</h3><p>Private groups with friends, group chat where proofs auto-post, and a squad-only leaderboard.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">06</span><h2>Who It's For</h2></div>
+    <div class="who">
+      <div class="cell"><h3>Friend Groups</h3><p>Squads who already have a group chat and a competitive streak. Side Quest gives the chat a daily reason to go off.</p></div>
+      <div class="cell"><h3>The Bored &amp; Curious</h3><p>People stuck in the scroll who want a nudge into something real. Small adventures, not another feed.</p></div>
+      <div class="cell"><h3>Streak Chasers</h3><p>The Strava / Duolingo type, wired by stats, ranks, and not breaking the chain.</p></div>
+      <div class="cell"><h3>Story Collectors</h3><p>People who want a better answer to "what did you do today" than nothing. Every quest is a story.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MONETIZATION -->
+<section id="money">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">07</span><h2>Monetization</h2></div>
+    <div class="money">
+      <div class="m"><div class="k">Free · Ad-Supported</div><div class="v">The full loop</div><p>Daily standard-deck quest, proof + AI verification, 3 skips, squads, leaderboards, streaks. Ads between quest reveal, after submission, and in the feed.</p></div>
+      <div class="m"><div class="k">Premium · Subscription</div><div class="v">Ad-free + more</div><p>Expanded themed decks, option to pick from 2–3 quests/day, monthly bonus skips, custom squad quests, profile badges.</p></div>
+      <div class="m"><div class="k">Microtransactions</div><div class="v">À la carte</div><p>Extra skip tokens for free users who don't want a full subscription.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- V1 SCOPE -->
+<section id="scope">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">08</span><h2>Build Scope</h2></div>
+    <div class="scope">
+      <div class="col now">
+        <h3>Ship in V1</h3>
+        <ul>
+          <li>Daily quest, photo/video upload</li>
+          <li>AI verification</li>
+          <li>3 free skip tokens</li>
+          <li>Streak counter</li>
+          <li>Squads (up to 10)</li>
+          <li>Squad + friends leaderboard</li>
+          <li>Single standard deck</li>
+          <li>Ad monetization</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Add in V2</h3>
+        <ul>
+          <li>Premium subscription</li>
+          <li>Additional themed decks</li>
+          <li>Global leaderboard</li>
+          <li>Discovery feed</li>
+          <li>User-submitted quests</li>
+          <li>Microtransaction skips</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Later</h3>
+        <ul>
+          <li>Brand partnerships (sponsored quests)</li>
+          <li>City / regional leaderboards</li>
+          <li>In-app events ("Dare Week")</li>
+          <li>Creator program for top submitters</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<div class="close">
+  <div class="wrap">
+    <h2>Go Touch<br>Grass.</h2>
+    <p>SIDE QUEST · DAILY DARE APP · V1 REFERENCE</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">SIDE QUEST · INTERNAL REFERENCE</span>
+    <span class="mono">V1 · 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
